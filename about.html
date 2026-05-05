@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tentang Saya | Zaidan.</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { main: ['Inter', 'sans-serif'] },
+                    colors: { bgdark: '#0e0e0e', carddark: '#161616', borderdark: '#262626', textmuted: '#a3a3a3' },
+                    animation: { 
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'marquee': 'marquee 20s linear infinite',
+                        'marquee2': 'marquee2 20s linear infinite', 
+                    },
+                    keyframes: {
+                        marquee: { '0%': { transform: 'translateX(0%)' }, '100%': { transform: 'translateX(-100%)' } },
+                        marquee2: { '0%': { transform: 'translateX(100%)' }, '100%': { transform: 'translateX(0%)' } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .bg-grid { background-size: 50px 50px; background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px); }
+        .dark .bg-grid { background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px); }
+        .glass-nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .text-outline { -webkit-text-stroke: 1px rgba(0,0,0,0.2); color: transparent; }
+        .dark .text-outline { -webkit-text-stroke: 1px rgba(255,255,255,0.2); color: transparent; }
+        html { scroll-behavior: smooth; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .ticker-wrapper::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="antialiased selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black bg-white dark:bg-[#0e0e0e] text-black dark:text-white transition-colors duration-300">
+
+    <div id="global-overlay" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#0e0e0e] dark:bg-white transition-colors duration-300" style="display: none;">
+        <div class="relative text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter">
+            <span id="overlay-text" class="text-white dark:text-black select-none">PROFIL.</span>
+        </div>
+        <div id="splash-loading" class="absolute bottom-0 left-0 w-full px-6 pb-8 md:px-12 md:pb-12 flex flex-col gap-4">
+            <div class="flex justify-between items-end text-white dark:text-black">
+                <span class="text-xs md:text-sm font-bold tracking-widest uppercase animate-pulse">Menghubungkan Data...</span>
+                <span id="loader-counter" class="text-6xl md:text-8xl font-black leading-none tracking-tighter">0%</span>
+            </div>
+            <div class="w-full h-[2px] bg-gray-800 dark:bg-gray-300 overflow-hidden">
+                <div id="loader-bar" class="h-full bg-white dark:bg-black w-0 transition-all duration-100"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-transition" class="fixed inset-0 z-[99] bg-[#0e0e0e] dark:bg-white flex items-center justify-center pointer-events-none" style="clip-path: circle(0% at 50% 50%); -webkit-clip-path: circle(0% at 50% 50%); display: none;">
+        <span class="transition-text text-white dark:text-black font-black tracking-widest text-3xl md:text-5xl animate-pulse">PROFIL.</span>
+    </div>
+
+    <nav id="navbar" class="fixed w-full top-0 z-50 glass-nav bg-white/80 dark:bg-[#0e0e0e]/80 border-b border-gray-200 dark:border-borderdark transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="bg-black text-white dark:bg-white dark:text-black font-bold text-xl px-3 py-1.5 rounded-sm tracking-tight transition-colors">ZAIDAN</a>
+            
+            <ul class="hidden md:flex gap-8 items-center font-medium text-sm text-gray-500 dark:text-textmuted">
+                <li><a href="index.html" class="hover:text-black dark:hover:text-white transition-colors">Rumah</a></li>
+                <li><a href="projects.html" class="hover:text-black dark:hover:text-white transition-colors">Proyek</a></li>
+                <li><a href="about.html" class="text-black dark:text-white border-b-2 border-black dark:border-white pb-1 transition-colors">Tentang</a></li>
+            </ul>
+
+            <div class="hidden md:flex items-center gap-4 text-sm font-medium">
+                <button id="theme-toggle" class="text-xl text-gray-500 dark:text-textmuted hover:text-black dark:hover:text-white transition-all focus:outline-none mr-2">
+                    <i class='bx bx-moon dark:hidden'></i>
+                    <i class='bx bx-sun hidden dark:block'></i>
+                </button>
+                <a href="index.html#contact" class="flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-300 dark:border-borderdark hover:bg-black/5 dark:hover:bg-white/5 transition-all text-black dark:text-white">
+                    Sapa Saya <i class='bx bx-send'></i>
+                </a>
+            </div>
+
+            <div class="md:hidden flex items-center gap-4">
+                <button id="theme-toggle-mobile" class="text-xl text-black dark:text-white focus:outline-none"><i class='bx bx-moon dark:hidden'></i><i class='bx bx-sun hidden dark:block'></i></button>
+                <button id="hamburger" class="text-2xl text-black dark:text-white focus:outline-none"><i class='bx bx-menu'></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="fixed inset-0 bg-white dark:bg-[#0e0e0e] z-40 transform translate-y-full transition-transform duration-500 flex flex-col justify-center items-center gap-8 text-2xl font-bold">
+        <button id="close-menu" class="absolute top-6 right-6 text-4xl text-gray-500 dark:text-textmuted"><i class='bx bx-x'></i></button>
+        <a href="index.html" class="mobile-link text-gray-500 dark:text-textmuted hover:text-black dark:hover:text-white">Rumah</a>
+        <a href="projects.html" class="mobile-link text-gray-500 dark:text-textmuted hover:text-black dark:hover:text-white">Proyek</a>
+        <a href="about.html" class="mobile-link text-black dark:text-white">Tentang</a>
+    </div>
+
+    <main class="pt-32 pb-20 md:pt-40 md:pb-32 relative bg-grid min-h-screen">
+        <div class="absolute top-20 md:top-40 left-0 md:left-10 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-black/5 dark:bg-white/5 rounded-full blur-[150px] pointer-events-none transition-colors duration-300"></div>
+
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-12 gap-16 relative z-10">
+            <div class="md:col-span-6 md:sticky md:top-40 h-fit reveal delay-200">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-8 h-[1px] bg-gray-400 dark:bg-textmuted"></div>
+                    <h3 class="text-sm font-bold tracking-widest text-gray-500 dark:text-textmuted uppercase">Tentang Saya</h3>
+                </div>
+                
+                <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight">
+    BUKAN<br>CUMA<br><span class="text-outline">SOAL</span><br>KODING.
+</h1>
+            </div>
+
+            <div class="md:col-span-6 space-y-12 md:space-y-16 mt-8 md:mt-0">
+                <div class="space-y-6 md:space-y-8 text-lg md:text-xl text-gray-600 dark:text-textmuted leading-relaxed font-light reveal delay-300">
+                    <p>
+                        Kenalin! Saya <strong class="text-black dark:text-white font-bold">Muhamad Zaidan Faiz</strong>. I build things for the web. Buat saya, bikin website itu lebih dari sekadar visual yang aesthetic, tapi gimana kita bisa nge-solve masalah user lewat desain yang intuitif.
+                    </p>
+                    <p>
+                        Berbasis di <strong class="text-black dark:text-white font-bold">SMK Negeri 1 Kota Pasuruan </strong> ruang eksplorasi saya nggak pernah tutup. From handling complex backend databases to crafting buttery-smooth frontend animations, I’m all in. Setiap hari selalu ada hal baru untuk diulik.
+                    </p>
+                </div>
+
+                <div class="reveal delay-400">
+                    <h2 class="text-2xl font-bold text-black dark:text-white mb-6 uppercase tracking-widest">Keahlian Inti</h2>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="px-5 py-2 border-2 border-black dark:border-white text-black dark:text-white font-bold uppercase tracking-widest text-xs rounded-full">Frontend Dev</span>
+                        <span class="px-5 py-2 border-2 border-gray-300 dark:border-borderdark text-gray-600 dark:text-textmuted font-bold uppercase tracking-widest text-xs rounded-full">UI/UX Design</span>
+                        <span class="px-5 py-2 border-2 border-black dark:border-white text-black dark:text-white font-bold uppercase tracking-widest text-xs rounded-full">Figma</span>
+                        <span class="px-5 py-2 border-2 border-gray-300 dark:border-borderdark text-gray-600 dark:text-textmuted font-bold uppercase tracking-widest text-xs rounded-full">Web Performance</span>
+                        <span class="px-5 py-2 border-2 border-black dark:border-white text-black dark:text-white font-bold uppercase tracking-widest text-xs rounded-full">Laravel</span>
+                        <span class="px-5 py-2 border-2 border-gray-300 dark:border-borderdark text-gray-600 dark:text-textmuted font-bold uppercase tracking-widest text-xs rounded-full">Next.js</span>
+                    </div>
+                </div>
+
+                <div class="reveal delay-500">
+                    <h2 class="text-2xl font-bold text-black dark:text-white mb-10 uppercase tracking-widest">Jejak Pendidikan</h2>
+                    
+                    <div class="border-l-2 border-gray-200 dark:border-borderdark ml-3 pl-10 space-y-16">
+                        <div class="relative group cursor-default">
+                            <div class="absolute -left-[48px] top-1.5 w-4 h-4 bg-black dark:bg-white rounded-full ring-4 ring-gray-100 dark:ring-bgdark transition-transform duration-300 group-hover:scale-150"></div>
+                            
+                            <div class="bg-gray-50 dark:bg-carddark p-6 rounded-2xl border border-gray-200 dark:border-borderdark group-hover:border-black dark:group-hover:border-white transition-colors duration-300">
+                                <p class="text-[10px] md:text-xs font-bold tracking-widest text-emerald-600 dark:text-emerald-400 mb-2 md:mb-3 bg-emerald-100 dark:bg-emerald-900/30 w-fit px-3 py-1 rounded-full">2024 — SEKARANG</p>
+                                <h3 class="text-2xl md:text-3xl font-bold text-black dark:text-white mb-2 md:mb-4">SMK Negeri 1 Pasuruan</h3>
+                                <p class="text-sm md:text-base text-gray-600 dark:text-textmuted leading-relaxed">
+                                    Jurusan Rekayasa Perangkat Lunak (RPL). Mendalami konsep algoritma kompleks, struktur data, Pemrograman Berorientasi Objek (OOP), dan pembangunan arsitektur aplikasi berbasis *Full-Stack*.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-8 md:pt-12 reveal delay-[600ms]">
+                    <a href="index.html#contact" class="inline-flex items-center gap-2 md:gap-4 text-black dark:text-white font-black text-2xl sm:text-3xl md:text-4xl hover:text-gray-500 dark:hover:text-textmuted transition-colors group">
+                        MARI BERKOLABORASI <i class='bx bx-right-arrow-alt text-3xl md:text-5xl group-hover:translate-x-3 transition-transform'></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-0 left-0 w-full border-t border-gray-200 dark:border-borderdark bg-gray-50 dark:bg-carddark py-6 flex overflow-hidden whitespace-nowrap select-none transition-colors duration-300">
+            <div class="animate-marquee flex gap-12 items-center text-xl md:text-3xl font-black text-outline tracking-widest px-6">
+                <span>LET'S BUILD SOMETHING GREAT</span><span class="text-gray-300 dark:text-borderdark">•</span>
+                <span>CREATIVE FRONTEND</span><span class="text-gray-300 dark:text-borderdark">•</span>
+                <span>LET'S BUILD SOMETHING GREAT</span><span class="text-gray-300 dark:text-borderdark">•</span>
+                <span>CREATIVE FRONTEND</span><span class="text-gray-300 dark:text-borderdark">•</span>
+            </div>
+            <div class="animate-marquee2 absolute top-6 flex gap-12 items-center text-xl md:text-3xl font-black text-outline tracking-widest px-6">
+                <span>LET'S BUILD SOMETHING GREAT</span><span class="text-gray-300 dark:text-borderdark">•</span>
+                <span>CREATIVE FRONTEND</span><span class="text-gray-300 dark:text-borderdark">•</span>
+                <span>LET'S BUILD SOMETHING GREAT</span><span class="text-gray-300 dark:text-borderdark">•</span>
+                <span>CREATIVE FRONTEND</span><span class="text-gray-300 dark:text-borderdark">•</span>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

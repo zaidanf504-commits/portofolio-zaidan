@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arsip Proyek | Zaidan.</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { main: ['Inter', 'sans-serif'] },
+                    colors: { bgdark: '#0e0e0e', carddark: '#161616', borderdark: '#262626', textmuted: '#a3a3a3' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .bg-grid { background-size: 50px 50px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px); }
+        .dark .bg-grid { background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px); }
+        .glass-nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .text-outline { -webkit-text-stroke: 1px rgba(0,0,0,0.2); color: transparent; }
+        .dark .text-outline { -webkit-text-stroke: 1px rgba(255,255,255,0.2); color: transparent; }
+        html { scroll-behavior: smooth; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body class="antialiased selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black bg-white dark:bg-[#0e0e0e] text-black dark:text-white transition-colors duration-300">
+
+    <div id="global-overlay" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#0e0e0e] dark:bg-white transition-colors duration-300" style="display: none;">
+        <div class="relative text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter">
+            <span id="overlay-text" class="text-white dark:text-black select-none">PROYEK.</span>
+        </div>
+        <div id="splash-loading" class="absolute bottom-0 left-0 w-full px-6 pb-8 md:px-12 md:pb-12 flex flex-col gap-4">
+            <div class="flex justify-between items-end text-white dark:text-black">
+                <span class="text-xs md:text-sm font-bold tracking-widest uppercase animate-pulse">Memuat Pengalaman...</span>
+                <span id="loader-counter" class="text-6xl md:text-8xl font-black leading-none tracking-tighter">0%</span>
+            </div>
+            <div class="w-full h-[2px] bg-gray-800 dark:bg-gray-300 overflow-hidden">
+                <div id="loader-bar" class="h-full bg-white dark:bg-black w-0 transition-all duration-100"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-transition" class="fixed inset-0 z-[99] bg-[#0e0e0e] dark:bg-white flex items-center justify-center pointer-events-none" style="clip-path: circle(0% at 50% 50%); -webkit-clip-path: circle(0% at 50% 50%); display: none;">
+        <span class="transition-text text-white dark:text-black font-black tracking-widest text-3xl md:text-5xl animate-pulse">PROYEK.</span>
+    </div>
+
+    <nav id="navbar" class="fixed w-full top-0 z-50 glass-nav bg-white/80 dark:bg-[#0e0e0e]/80 border-b border-gray-200 dark:border-borderdark transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="bg-black text-white dark:bg-white dark:text-black font-bold text-xl px-3 py-1.5 rounded-sm tracking-tight transition-colors">ZAIDAN</a>
+            <ul class="hidden md:flex gap-8 items-center font-medium text-sm text-gray-500 dark:text-textmuted">
+                <li><a href="index.html" class="hover:text-black dark:hover:text-white transition-colors">Rumah</a></li>
+                <li><a href="projects.html" class="text-black dark:text-white border-b-2 border-black dark:border-white pb-1 transition-colors">Proyek</a></li>
+                <li><a href="about.html" class="hover:text-black dark:hover:text-white transition-colors">Tentang</a></li>
+            </ul>
+            <div class="hidden md:flex items-center gap-4 text-sm font-medium">
+                <button id="theme-toggle" class="text-xl text-gray-500 dark:text-textmuted hover:text-black dark:hover:text-white transition-all focus:outline-none mr-2"><i class='bx bx-moon dark:hidden'></i><i class='bx bx-sun hidden dark:block'></i></button>
+                <a href="index.html#contact" class="flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-300 dark:border-borderdark hover:bg-black/5 dark:hover:bg-white/5 transition-all text-black dark:text-white">
+                    Sapa Saya <i class='bx bx-send'></i>
+                </a>
+            </div>
+            <div class="md:hidden flex items-center gap-4">
+                <button id="theme-toggle-mobile" class="text-xl text-black dark:text-white focus:outline-none"><i class='bx bx-moon dark:hidden'></i><i class='bx bx-sun hidden dark:block'></i></button>
+                <button id="hamburger" class="text-2xl text-black dark:text-white focus:outline-none"><i class='bx bx-menu'></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="fixed inset-0 bg-white dark:bg-[#0e0e0e] z-40 transform translate-y-full transition-transform duration-500 flex flex-col justify-center items-center gap-8 text-2xl font-bold">
+        <button id="close-menu" class="absolute top-6 right-6 text-4xl text-gray-500 dark:text-textmuted"><i class='bx bx-x'></i></button>
+        <a href="index.html" class="mobile-link text-gray-500 dark:text-textmuted hover:text-black dark:hover:text-white">Rumah</a>
+        <a href="projects.html" class="mobile-link text-black dark:text-white">Proyek</a>
+        <a href="about.html" class="mobile-link text-gray-500 dark:text-textmuted hover:text-black dark:hover:text-white">Tentang</a>
+    </div>
+
+    <main class="pt-32 pb-20 md:pt-40 md:pb-32 max-w-7xl mx-auto px-6 relative bg-grid min-h-screen">
+        <div class="absolute top-10 md:top-20 right-0 w-64 h-64 md:w-96 md:h-96 bg-black/5 dark:bg-white/5 rounded-full blur-[120px] pointer-events-none transition-colors duration-300"></div>
+
+        <div class="flex items-center gap-4 mb-8 reveal delay-200">
+            <div class="w-8 h-[1px] bg-gray-400 dark:bg-textmuted"></div>
+            <h3 class="text-sm font-bold tracking-widest text-gray-500 dark:text-textmuted uppercase">Arsip Lengkap</h3>
+        </div>
+        
+        <h1 class="text-5xl md:text-7xl lg:text-[6rem] font-black mb-16 leading-[1] tracking-tight reveal delay-300">
+            KUMPULAN <span class="text-outline">KARYA</span><br>DIGITAL SAYA.
+        </h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <a href="ecommerce.html" class="group flex flex-col bg-gray-50 dark:bg-carddark rounded-3xl overflow-hidden border border-gray-200 dark:border-borderdark hover:-translate-y-3 hover:shadow-2xl dark:hover:shadow-white/5 transition-all duration-500 reveal">
+                <div class="h-[220px] sm:h-[280px] w-full overflow-hidden bg-gray-200 dark:bg-bgdark relative border-b border-gray-200 dark:border-borderdark">
+                    <img src="image/zifood.png" alt="ZiFood Web" class="absolute inset-0 w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105">
+                </div>
+                <div class="p-8 flex flex-col flex-grow">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-2xl font-bold text-black dark:text-white group-hover:text-gray-500 transition-colors">ZiFood Platform</h3>
+                        <i class='bx bx-top-right-arrow text-2xl text-gray-400 dark:text-textmuted group-hover:text-black dark:group-hover:text-white transition-colors'></i>
+                    </div>
+                    <p class="text-[10px] font-bold tracking-widest text-gray-500 dark:text-textmuted uppercase mb-4">PROYEK E-COMMERCE</p>
+                    <p class="text-gray-600 dark:text-textmuted text-sm leading-relaxed mb-8 flex-grow">Sistem pemesanan makanan interaktif dengan keranjang belanja dinamis dan checkout real-time.</p>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="px-3 py-1 bg-white dark:bg-bgdark border border-gray-200 dark:border-borderdark rounded-lg text-xs font-bold text-gray-600 dark:text-textmuted shadow-sm">Laravel</span>
+                        <span class="px-3 py-1 bg-white dark:bg-bgdark border border-gray-200 dark:border-borderdark rounded-lg text-xs font-bold text-gray-600 dark:text-textmuted shadow-sm">Tailwind CSS</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="group flex flex-col bg-gray-50 dark:bg-carddark rounded-3xl overflow-hidden border border-gray-200 dark:border-borderdark hover:-translate-y-3 hover:shadow-2xl dark:hover:shadow-white/5 transition-all duration-500 reveal delay-100">
+                <div class="h-[220px] sm:h-[280px] w-full overflow-hidden bg-gray-200 dark:bg-bgdark relative border-b border-gray-200 dark:border-borderdark">
+                    <img src="image/magang.png" alt="Sistem Laporan PKL" class="absolute inset-0 w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105">
+                </div>
+                <div class="p-8 flex flex-col flex-grow">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-2xl font-bold text-black dark:text-white group-hover:text-gray-500 transition-colors">Jurnal PKL</h3>
+                        <i class='bx bx-top-right-arrow text-2xl text-gray-400 dark:text-textmuted group-hover:text-black dark:group-hover:text-white transition-colors'></i>
+                    </div>
+                    <p class="text-[10px] font-bold tracking-widest text-gray-500 dark:text-textmuted uppercase mb-4">SISTEM MANAJEMEN</p>
+                    <p class="text-gray-600 dark:text-textmuted text-sm leading-relaxed mb-8 flex-grow">Aplikasi monitoring logbook siswa magang dengan arsitektur role-based access control.</p>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="px-3 py-1 bg-white dark:bg-bgdark border border-gray-200 dark:border-borderdark rounded-lg text-xs font-bold text-gray-600 dark:text-textmuted shadow-sm">Next.js</span>
+                        <span class="px-3 py-1 bg-white dark:bg-bgdark border border-gray-200 dark:border-borderdark rounded-lg text-xs font-bold text-gray-600 dark:text-textmuted shadow-sm">Supabase</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
